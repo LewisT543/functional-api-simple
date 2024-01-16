@@ -1,0 +1,29 @@
+# Ignore compiled files
+/target/
+
+# Ignore IntelliJ IDEA files
+.idea/
+
+# Ignore Eclipse files
+.classpath
+.project
+.settings/
+
+# Ignore SBT-specific files
+*.sbt
+project/target/
+
+# Ignore Maven-specific files
+target/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and other runtime generated files
+/logs/
+/log/
+
+# Ignore database connection configuration files (modify as needed)
+/src/main/resources/application.conf
+/src/main/resources/application-dev.conf
