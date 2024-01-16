@@ -12,6 +12,7 @@
 # Ignore SBT-specific files
 *.sbt
 project/target/
+.bsp/
 
 # Ignore Maven-specific files
 target/
