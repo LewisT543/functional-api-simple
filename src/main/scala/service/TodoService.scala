@@ -6,7 +6,7 @@ import cats.implicits._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
-import model.{Importance, Todo, TodoNotFoundError}
+import model.{Importance, Todo}
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.headers.Location

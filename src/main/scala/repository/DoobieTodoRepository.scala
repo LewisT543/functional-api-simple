@@ -2,10 +2,9 @@ package repository
 
 import cats.effect.Async
 import cats.implicits._
-import doobie._
 import doobie.implicits._
 import doobie.util.transactor.Transactor
-import model.{Importance, Todo}
+import model.Todo
 import org.slf4j.{Logger, LoggerFactory}
 import service.TodoService
 
