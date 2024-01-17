@@ -1,4 +1,4 @@
-import cats.effect.{IO, Resource}
+import cats.effect._
 import config.DatabaseConfig
 import doobie.hikari.HikariTransactor
 import org.flywaydb.core.Flyway
@@ -6,8 +6,8 @@ import org.flywaydb.core.Flyway
 import scala.concurrent.ExecutionContext
 
 object Database {
-  def transactor(config: DatabaseConfig, executionContext: ExecutionContext): Resource[IO, HikariTransactor[IO]] = {
-    HikariTransactor.newHikariTransactor[IO](
+  def transactor[F[_]: Async](config: DatabaseConfig, executionContext: ExecutionContext): Resource[F, HikariTransactor[F]] = {
+    HikariTransactor.newHikariTransactor[F](
       config.driver,
       config.url,
       config.user,
@@ -16,9 +16,9 @@ object Database {
     )
   }
 
-  def initialize(transactor: HikariTransactor[IO]): IO[Unit] = {
+  def initialize[F[_]: Async](transactor: HikariTransactor[F]): F[Unit] = {
     transactor.configure { dataSource =>
-      IO {
+      Sync[F].delay {
         val flyWay = Flyway.configure().dataSource(dataSource).locations("classpath:db/migration").load()
         flyWay.migrate()
         ()
