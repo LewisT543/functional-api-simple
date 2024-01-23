@@ -5,8 +5,7 @@ import cats.effect._
 import cats.implicits._
 import io.circe.generic.auto._
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
-import model.{Importance, Todo}
+import model.Todo
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.headers.Location
@@ -15,9 +14,6 @@ import org.slf4j.{Logger, LoggerFactory}
 import repository.DoobieTodoRepository
 
 class TodoService[F[_]: Async](repository: DoobieTodoRepository[F]) extends Http4sDsl[F] {
-  private implicit val encodeImportance: Encoder[Importance] = Encoder.encodeString.contramap[Importance](_.value)
-  private implicit val decodeImportance: Decoder[Importance] = Decoder.decodeString.map[Importance](Importance.unsafeFromString)
-
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   val routes: HttpRoutes[F] = HttpRoutes.of[F] {
@@ -40,8 +36,9 @@ class TodoService[F[_]: Async](repository: DoobieTodoRepository[F]) extends Http
 
   private def createTodo(req: Request[F]): F[Response[F]] = for {
     todo <- req.decodeJson[Todo]
+    // Id need to do validation here? But this doesn't work with ADT?
     result <- repository.createTodo(todo)
-    x = logger.error(s"resultOfCreate $result")
+    y = logger.error(s"resultOfCreate $result")
     response <- result match {
       case Right(createdTodo) => Created(createdTodo.asJson, Location(Uri.unsafeFromString(s"/todos/${createdTodo.id.get}")))
       case Left(error) => handleTodoErrors(error)

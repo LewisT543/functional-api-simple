@@ -5,6 +5,8 @@ import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.http4s.implicits.http4sKleisliResponseSyntaxOptionT
 import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.server.middleware.{Logger => RequestLogger}
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import repository.DoobieTodoRepository
 import service.TodoService
 
@@ -29,9 +31,11 @@ object HttpServer {
     for {
       _ <- Database.initialize[F](resources.transactor)
       repository = new DoobieTodoRepository[F](resources.transactor)
+      logger <- Slf4jLogger.create[F]
       exitCode <- BlazeServerBuilder[F](global)
         .bindHttp(resources.config.server.port, resources.config.server.host)
-        .withHttpApp(new TodoService[F](repository).routes.orNotFound).serve.compile.lastOrError
+        .withHttpApp(RequestLogger.httpApp(logHeaders = false, logBody = true)(new TodoService[F](repository).routes.orNotFound))
+        .serve.compile.lastOrError
     } yield exitCode
   }
 
