@@ -1,4 +1,4 @@
-# (Simple) Http4s API
+# (Simple-ish) Scala Http4s API
 
 The Intention of this project was to construct a working example of a functional style API uisng the following tools:
 
