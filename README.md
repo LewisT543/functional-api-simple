@@ -4,7 +4,8 @@ The Intention of this project was to construct a working example of a functional
 
 1. Api/Server -> Http4s, a functional http server / http request library - this is the core of our application
 2. Database -> Doobie, a functional db layer, essentially a functional wrapper over jdbc. This allows for type-safe fetching of data from DB.
-3. Configuration -> PureConfig, functional configuration tool
+3. Persistence Infra -> Currently using a dockerised postgresql deployment from outside this project. In a standalone app, we'd include the docker code and spin it up before starting the server.
+3. Configuration -> PureConfig, functional configuration tool 
 4. DB Migrations -> Flyway is a DB migrations tool that fits nicely within our ecosystem
 5. JSON decoder/encoder -> Circe, we use this to define mappings between DB entities and our case classes in our model. Using Circe Generic Auto is even more hands off, allowing for inferred type-safe conversion.
 6. Cats + Cats-effect -> We use both of these for the type level definitions and implicits they provide. 
